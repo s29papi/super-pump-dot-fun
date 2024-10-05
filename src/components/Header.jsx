@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
-   
+
   return (
     <div
       className={`flex items-center justify-between p-[16px] lg:px-[100px] lg:py-[32px]`}
@@ -28,7 +28,7 @@ const Header = () => {
       </div>
 
       <div>
-      <w3m-button />
+        <w3m-button />
       </div>
     </div>
   );
