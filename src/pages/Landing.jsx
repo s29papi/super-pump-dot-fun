@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../components/header";
+import Header from "../components/Header";
 import { PrimaryButton } from "../components/Button";
 import DefaultCoin from "../components/DefaultCoin";
 import TokenBox from "../components/TokenBox";

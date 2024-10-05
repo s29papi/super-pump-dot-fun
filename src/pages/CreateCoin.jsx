@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../components/header";
+import Header from "../components/Header";
 import { BackButton, PrimaryButton } from "../components/Button";
 import FileUploader from "../components/FileUploader";
 import Footer from "../components/Footer";
