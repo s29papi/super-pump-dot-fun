@@ -1,1 +1,1 @@
-export const BASE_URL = "https://omini.onrender.com/api/v1";
+export const BASE_URL = "https://api.omnimint.fun/";
