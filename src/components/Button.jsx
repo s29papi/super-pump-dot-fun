@@ -30,3 +30,21 @@ export const BackButton = () => {
     </div>
   );
 };
+
+export const OutlinedButton = ({ title, onClick, width, icon }) => {
+  return (
+    <div className={`flex`}>
+      <div
+        onClick={onClick}
+        className={`bg-transparent rounded-[8px] p-[10px] 
+          cursor-pointer flex justify-center border border-primary`}
+        style={{ width: width ? width : "100px" }}
+      >
+        <div className={`flex items-center ${icon && `space-x-[10px]`}`}>
+          {icon && icon}
+          <p className={`font-poppins text-white`}>{title}</p>
+        </div>
+      </div>
+    </div>
+  );
+};

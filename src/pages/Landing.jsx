@@ -128,7 +128,6 @@ const Landing = () => {
   useEffect(() => {
     if (status === "disconnected") {
       localStorage.removeItem("omni_token");
-      toast.error("Session not active, please connect wallet.");
     }
   }, [status]);
 
