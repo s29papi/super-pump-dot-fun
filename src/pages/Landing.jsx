@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Header from "../components/Header";
 import { PrimaryButton } from "../components/Button";
 import DefaultCoin from "../components/DefaultCoin";
 import TokenBox from "../components/TokenBox";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
+import { useAccount } from "wagmi";
+import { BASE_URL } from "../../config";
+import axios from "axios";
+import CircularLoader from "../components/CircularLoader";
+import { toast } from "react-toastify";
+import { GlobalContext } from "../conjext";
 
 const tokens = [
   {
@@ -51,9 +57,105 @@ const tokens = [
 
 const Landing = () => {
   const navigate = useNavigate();
+  const { address, status } = useAccount();
+
+  const {
+    signinLoading,
+    setSigninLoading,
+    registerLoading,
+    setRegisterLoading,
+  } = useContext(GlobalContext);
+
+  const registerWallet = async (address) => {
+    setRegisterLoading(true);
+
+    const data = {
+      wallet: address,
+    };
+
+    axios
+      .post(`${BASE_URL}/users/register`, data)
+      .then((res) => {
+        console.log("Register successful", res.data);
+        setRegisterLoading(false);
+        toast.success("Wallet now active.");
+        localStorage.setItem("omni_token", res.data.data.token);
+      })
+      .catch((err) => {
+        console.error(
+          "Register failed",
+          err.response ? err.response.data.message : err
+        );
+        if (err.response.data.message) {
+          toast.error(err.response.data.message);
+          setRegisterLoading(false);
+        }
+      });
+  };
+
+  useEffect(() => {
+    if (!address) {
+      console.log("Wallet not connected!");
+    } else {
+      setSigninLoading(true);
+
+      const data = {
+        wallet: address,
+      };
+
+      axios
+        .post(`${BASE_URL}/users/login`, data)
+        .then((res) => {
+          console.log("Login successful", res.data);
+          toast.success("Session restored.");
+          setSigninLoading(false);
+          localStorage.setItem("omni_token", res.data.data.token);
+        })
+        .catch((err) => {
+          console.error(
+            "Login failed",
+            err.response ? err.response.data.message : err
+          );
+          if (err.response.data.message === "Invalid credentials") {
+            toast.error("Account does not exist, creating new account...");
+            setSigninLoading(false);
+            registerWallet(address);
+          }
+        });
+    }
+  }, [address]);
+
+  useEffect(() => {
+    if (status === "disconnected") {
+      localStorage.removeItem("omni_token");
+      toast.error("Session not active, please connect wallet.");
+    }
+  }, [status]);
 
   return (
     <div className={`bg-primary_dark font-poppins `}>
+      {/* Loading */}
+
+      {signinLoading && (
+        <div className={`fixed top-0 left-0 w-full h-full z-10`}>
+          <div
+            className={`w-full h-full bg-[#000000bc] flex justify-center items-center`}
+          >
+            <CircularLoader title={"Restoring your session"} />
+          </div>
+        </div>
+      )}
+
+      {registerLoading && (
+        <div className={`fixed top-0 left-0 w-full h-full z-10`}>
+          <div
+            className={`w-full h-full bg-[#000000bc] flex justify-center items-center`}
+          >
+            <CircularLoader title={"Creating new session"} />
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <Header />
 
