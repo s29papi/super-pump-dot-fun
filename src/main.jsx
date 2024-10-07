@@ -31,8 +31,8 @@ const wagmiAdapter = new WagmiAdapter({
   projectId,
   ssr: true,
   storage: createStorage({
-    storage: localStorage
-  })
+    storage: cookieStorage
+  }),
 });
 
 createAppKit({
