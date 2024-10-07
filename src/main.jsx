@@ -18,9 +18,9 @@ if (!projectId) {
 }
 
 const metadata = {
-  name: "Omni",
-  description: "Omni",
-  url: "https://example.com", // origin must match your domain & subdomain
+  name: "omnimint",
+  description: "omnimint",
+  url: "https://omnimint.fun/", // origin must match your domain & subdomain
   icons: ["https://avatars.githubusercontent.com/u/179229932"],
 };
 
