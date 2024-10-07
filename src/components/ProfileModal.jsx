@@ -1,12 +1,19 @@
 import React from "react";
 import { FaUser } from "react-icons/fa";
-import { useAccount } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
 import { IoIosWallet } from "react-icons/io";
 import { MdCastConnected } from "react-icons/md";
 import { OutlinedButton } from "./Button";
 
 const ProfileModal = ({ onClose }) => {
   const { address, isConnected } = useAccount();
+  const { disconnect } = useDisconnect()
+
+  let formattedAddr = address ? address.substring(36, 42) : "0x... [ connect wallet ]";
+
+ const handleDisconnect = () => { 
+    disconnect()
+ }
 
   return (
     <div className={`fixed top-0 left-0 w-full h-full z-10`}>
@@ -29,7 +36,7 @@ const ProfileModal = ({ onClose }) => {
                 <p className={`text-[14px]`}>Username :</p>
               </div>
 
-              <p className={`text-[14px]`}>{`${address.substring(36, 42)}`}</p>
+              <p className={`text-[14px]`}>{`${formattedAddr}`}</p>
             </div>
             <div className={`flex items-center space-x-[50px]`}>
               <div className={`flex items-center space-x-[14px]`}>
@@ -51,7 +58,7 @@ const ProfileModal = ({ onClose }) => {
             </div>
 
             <div className={`flex justify-center w-full`}>
-              <OutlinedButton title={"Disconnect"} width={"100%"} />
+              <OutlinedButton title={"Disconnect"} width={"100%"} onClick={handleDisconnect} />
             </div>
           </div>
         </div>
