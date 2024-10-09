@@ -1,8 +1,7 @@
-import ERC20Factory from "../../abi/ERC20Factory";
+import ERC20Factory from "../../stf-abi";
 import React, { useContext, useState, useEffect } from "react";
 import {
   useAccount,
-  useBalance,
   useWriteContract,
   useWaitForTransactionReceipt,
 } from "wagmi";
@@ -14,7 +13,6 @@ import { GlobalContext } from "../conjext";
 import CircularLoader from "../components/CircularLoader";
 import { FaArrowDown } from "react-icons/fa";
 import { parseUnits } from "viem";
-import { watchContractEvent } from "@wagmi/core";
 
 const CreateCoin = () => {
   const { signinLoading, registerLoading } = useContext(GlobalContext);
@@ -22,8 +20,9 @@ const CreateCoin = () => {
 
   const [tokenName, setTokenName] = useState("");
   const [tokenTicker, setTokenTicker] = useState("");
+  const [underlyingTokenAddress, setUnderlyingTokenAddress] = useState("");
 
-  const { isConnected } = useAccount(); // user must be connected b4 create token, you can make use of isConnected (true || false)
+  // const { isConnected } = useAccount(); // user must be connected b4 create token, you can make use of isConnected (true || false)
 
   const { data: hash, writeContract } = useWriteContract();
 
@@ -36,14 +35,16 @@ const CreateCoin = () => {
   // const [websiteLink, setWebsiteLink] = useState("");
 
   const handleCreateCoin = async () => {
+    
     writeContract({
       abi: ERC20Factory,
-      address: "0x2d34f09772CB0C0e531d06C15993E51974535EfB",
-      functionName: "createERC20Token",
+      address: "0xe20B9a38E0c96F61d1bA6b42a61512D56Fea1Eb3",
+      functionName: "CreateERC20Wrapper",
       args: [
+        underlyingTokenAddress, 
+        0n, // To-Do: Let contract deploy with 0 initial supply
         tokenName,
         tokenTicker,
-        parseUnits("1.0", 18), // To-Do: Let contract deploy with 0 initial supply
       ],
     });
   };
@@ -60,7 +61,7 @@ const CreateCoin = () => {
 
   useEffect(() => {
     if (isConfirmed && data && data.logs) {
-      setNewTokenAddress("0x" + data.logs[1].topics[1].slice(26));
+      // setNewTokenAddress("0x" + data.logs[1].topics[1].slice(26));
     }
   }, [isConfirmed, data]);
 
@@ -119,6 +120,16 @@ const CreateCoin = () => {
               />
             </div>
             <div>
+              <p className={`text-primary text-[18px]`}>Underlying Token Address</p>
+              <input
+                type="text"
+                className={`outline-none w-full lg:w-full 
+                    p-[10px] text-white rounded-[4px] mt-[4px] bg-[#333] border border-primary`}
+                value={underlyingTokenAddress}
+                onChange={(e) => setUnderlyingTokenAddress(e.target.value)}
+              />
+            </div>
+            <div>
               <p className={`text-primary text-[18px]`}>Token description</p>
               <textarea
                 type="text"
@@ -173,7 +184,6 @@ const CreateCoin = () => {
                   </p>
                   <input
                     type="text"
-                    S
                     className={`outline-none w-full lg:w-full 
                     p-[10px] text-white rounded-[4px] mt-[4px] bg-[#333] border border-primary`}
                   />

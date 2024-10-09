@@ -1,1 +1,1 @@
-export const BASE_URL = "https://api.omnimint.fun/api/v1";
+export const BASE_URL = "https://omni.solgram.app/api/v1";

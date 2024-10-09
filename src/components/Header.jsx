@@ -51,7 +51,7 @@ const Header = () => {
           onClick={() => navigate("/")}
         >
           <img src={Logo} alt="" className={`w-[100px]`} />
-          <p className={`text-white uppercase text-[30px] font-[800]`}>Omni</p>
+          <p className={`text-white uppercase text-[30px] font-[800]`}>superpump</p>
         </div>
 
         <div className={`hidden lg:flex items-center space-x-[20px]`}>
